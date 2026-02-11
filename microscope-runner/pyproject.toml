@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "microscope-runner"
+version = "0.1.0"
+description = "WA5202 microscope capture service for laser engraving quality analysis"
+authors = ["Connor Sullivan <williams@lasertagstudio.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.109.0"
+uvicorn = "^0.27.0"
+opencv-python = "^4.9.0"
+pydantic = "^2.5.0"
+pydantic-settings = "^2.1.0"
+python-dotenv = "^1.0.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.4.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
