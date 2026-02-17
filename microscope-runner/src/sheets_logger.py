@@ -42,7 +42,8 @@ class SheetsLogger:
         parameters: Optional[Dict[str, Any]] = None,
         tuning_session_id: Optional[str] = None,
         iteration: Optional[int] = None,
-        notes: Optional[str] = None
+        notes: Optional[str] = None,
+        metrics: Optional[Dict[str, Any]] = None
     ) -> Tuple[bool, str]:
         """
         Log a capture to the Microscope_Captures sheet.
@@ -59,6 +60,7 @@ class SheetsLogger:
             
             # Extract parameters
             params = parameters or {}
+            mets = metrics or {}
             
             # Build row data matching sheet columns
             row = [
@@ -76,10 +78,10 @@ class SheetsLogger:
                 params.get('whiteClip', ''),         # whiteClip
                 params.get('contrast', ''),          # contrast
                 params.get('brightness', ''),        # brightness
-                '',                                  # manual_score (filled later)
-                '',                                  # metric_contrast (computed later)
-                '',                                  # metric_sharpness (computed later)
-                '',                                  # metric_composite (computed later)
+                '',                                  # manual_score (filled by human later)
+                mets.get('metric_contrast', ''),     # metric_contrast (auto-computed)
+                mets.get('metric_sharpness', ''),    # metric_sharpness (auto-computed)
+                mets.get('metric_composite', ''),    # metric_composite (auto-computed)
                 tuning_session_id or '',             # tuning_session_id
                 iteration if iteration is not None else '',  # iteration
                 notes or ''                          # notes

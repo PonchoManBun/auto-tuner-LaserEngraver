@@ -199,7 +199,16 @@ async def capture_image(request: CaptureRequest):
                 else:
                     logger.warning("Drive upload failed, continuing without Drive")
         
-        # 3. Log to Google Sheets
+        # 3. Compute image metrics
+        metrics = {}
+        try:
+            from .image_metrics import compute_metrics
+            metrics = compute_metrics(local_path)
+            logger.info(f"Computed metrics: composite={metrics.get('metric_composite')}")
+        except Exception as e:
+            logger.warning(f"Failed to compute metrics: {e}")
+        
+        # 4. Log to Google Sheets (with metrics)
         capture_id = None
         if settings.log_to_sheets:
             sheets = get_sheets_logger()
@@ -213,7 +222,8 @@ async def capture_image(request: CaptureRequest):
                     parameters=request.parameters,
                     tuning_session_id=request.tuning_session_id,
                     iteration=request.iteration,
-                    notes=request.notes
+                    notes=request.notes,
+                    metrics=metrics
                 )
                 if log_success:
                     logger.info(f"Logged to sheet: {capture_id}")
